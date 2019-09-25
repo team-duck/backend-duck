@@ -5,12 +5,14 @@ const passport = require('passport')
 
 // pull in Mongoose model for surveys
 const Survey = require('../models/survey')
-const Question = require('../models/question')
-const Response = require('../models/response')
+const User = require('../models/user')
+// const Question = require('../models/question')
+// const Response = require('../models/response')
 // this is a collection of methods that help us detect situations when we need
 // to throw a custom error
 const customErrors = require('../../lib/custom_errors')
-const responseHandler = require('./responseHandler')
+const responseHandler = require('../../lib/responseHandler')
+const addSurveyToUser = require('../../lib/addSurveyToUser')
 // we'll use this function to send 404 when non-existant documeSurveynt is requested
 const handle404 = customErrors.handle404
 // we'll use this function to send 401 when a user tries to modify a resource
@@ -29,14 +31,17 @@ const requireToken = passport.authenticate('bearer', { session: false })
 const router = express.Router()
 // ANSWERS SECTION
 router.patch('/response/:id', requireToken, (req, res, next) => {
-  console.log('user id', req.user.id)
   const userResponse = req.body // need define form of request
   userResponse.user = req.user.id
-  console.log(userResponse)
+
   Survey.findById(req.params.id)
     .then(handle404)
     .then(survey => responseHandler(survey, userResponse))
-    .then(survey => res.status(200).json({ survey: survey.toObject() }))
+    .then(survey => {
+      return User.findById(userResponse.user)
+        .then(user => addSurveyToUser(user, survey))
+        .then(user => res.status(200).json({ survey: survey.toObject() }))
+    })
     .catch(next)
 })
 // INDEX
