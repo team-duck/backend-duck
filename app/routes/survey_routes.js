@@ -5,7 +5,8 @@ const passport = require('passport')
 
 // pull in Mongoose model for surveys
 const Survey = require('../models/survey')
-
+// const Question = require('../models/question')
+// const Response = require('../models/response')
 // this is a collection of methods that help us detect situations when we need
 // to throw a custom error
 const customErrors = require('../../lib/custom_errors')
@@ -59,8 +60,9 @@ router.get('/surveys/:id', requireToken, (req, res, next) => {
 // POST /surveys
 router.post('/surveys', requireToken, (req, res, next) => {
   // set owner of new survey to be current user
+  console.log('create req', req.body)
   req.body.survey.owner = req.user.id
-
+  console.log(req.body.survey)
   Survey.create(req.body.survey)
     // respond to succesful `create` with status 201 and JSON of new "survey"
     .then(survey => {

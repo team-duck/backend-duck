@@ -1,4 +1,5 @@
 const mongoose = require('mongoose')
+const responseSchema = require('./response')
 const Schema = mongoose.Schema
 
 const questionSchema = Schema({
@@ -8,10 +9,7 @@ const questionSchema = Schema({
     required: true
   },
   index: Number, // order of the question
-  responses: [{
-    type: Schema.Types.ObjectId,
-    ref: 'Response'
-  }]
+  responses: [responseSchema]
 })
 
-module.exports = mongoose.model('Survey', questionSchema)
+module.exports = questionSchema

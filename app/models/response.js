@@ -9,4 +9,4 @@ const responseSchema = Schema({
   }] // users that chose that response
 })
 
-module.exports = mongoose.model('Survey', responseSchema)
+module.exports = responseSchema

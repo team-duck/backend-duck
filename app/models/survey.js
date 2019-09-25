@@ -1,5 +1,6 @@
 const mongoose = require('mongoose')
 const Schema = mongoose.Schema
+const questionSchema = require('./question')
 
 const surveySchema = Schema({
   owner: {
@@ -11,10 +12,9 @@ const surveySchema = Schema({
     type: String,
     required: true
   },
-  questions: [{
-    type: Schema.Types.ObjectId,
-    ref: 'Question'
-  }]
+  questions: [questionSchema]
+}, {
+  timestamps: true
 })
 
 module.exports = mongoose.model('Survey', surveySchema)
