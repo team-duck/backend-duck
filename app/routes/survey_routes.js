@@ -5,12 +5,12 @@ const passport = require('passport')
 
 // pull in Mongoose model for surveys
 const Survey = require('../models/survey')
-// const Question = require('../models/question')
-// const Response = require('../models/response')
+const Question = require('../models/question')
+const Response = require('../models/response')
 // this is a collection of methods that help us detect situations when we need
 // to throw a custom error
 const customErrors = require('../../lib/custom_errors')
-
+const responseHandler = require('./responseHandler')
 // we'll use this function to send 404 when non-existant documeSurveynt is requested
 const handle404 = customErrors.handle404
 // we'll use this function to send 401 when a user tries to modify a resource
@@ -27,7 +27,18 @@ const requireToken = passport.authenticate('bearer', { session: false })
 
 // instantiate a router (mini app that only handles routes)
 const router = express.Router()
-
+// ANSWERS SECTION
+router.patch('/response/:id', requireToken, (req, res, next) => {
+  console.log('user id', req.user.id)
+  const userResponse = req.body // need define form of request
+  userResponse.user = req.user.id
+  console.log(userResponse)
+  Survey.findById(req.params.id)
+    .then(handle404)
+    .then(survey => responseHandler(survey, userResponse))
+    .then(survey => res.status(200).json({ survey: survey.toObject() }))
+    .catch(next)
+})
 // INDEX
 // GET /surveys
 router.get('/surveys', requireToken, (req, res, next) => {
@@ -60,7 +71,6 @@ router.get('/surveys/:id', requireToken, (req, res, next) => {
 // POST /surveys
 router.post('/surveys', requireToken, (req, res, next) => {
   // set owner of new survey to be current user
-  console.log('create req', req.body)
   req.body.survey.owner = req.user.id
   console.log(req.body.survey)
   Survey.create(req.body.survey)
