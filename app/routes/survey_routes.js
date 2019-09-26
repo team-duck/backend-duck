@@ -8,13 +8,14 @@ const Survey = require('../models/survey')
 const User = require('../models/user')
 // const Question = require('../models/question')
 // const Response = require('../models/response')
-// this is a collection of methods that help us detect situations when we need
+// this is a collection of methods that jhelp us detect situations when we need
 // to throw a custom error
 const customErrors = require('../../lib/custom_errors')
-const responseHandler = require('../../lib/responseHandler')
+const addUserToResponse = require('../../lib/addUserToResponse')
 const addSurveyToUser = require('../../lib/addSurveyToUser')
 // we'll use this function to send 404 when non-existant documeSurveynt is requested
 const handle404 = customErrors.handle404
+const noDuplicateSurveys = customErrors.noDuplicateSurveys
 // we'll use this function to send 401 when a user tries to modify a resource
 // that's owned by someone else
 const requireOwnership = customErrors.requireOwnership
@@ -36,11 +37,15 @@ router.patch('/response/:id', requireToken, (req, res, next) => {
 
   Survey.findById(req.params.id)
     .then(handle404)
-    .then(survey => responseHandler(survey, userResponse))
+    // handle if user has responded to survey
     .then(survey => {
       return User.findById(userResponse.user)
-        .then(user => addSurveyToUser(user, survey))
-        .then(user => res.status(200).json({ survey: survey.toObject() }))
+        .then(user => noDuplicateSurveys(user, req.params.id))
+        .then(user => {
+          return addUserToResponse(survey, userResponse)
+            .then(survey => addSurveyToUser(user, survey))
+        })
+        .then(user => res.status(200).json({ survey: survey.toObject(), user: user.toObject() }))
     })
     .catch(next)
 })
