@@ -10,6 +10,7 @@ const userSchema = new mongoose.Schema({
     type: String,
     required: true
   },
+  answeredSurveys: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Survey' }],
   token: String
 }, {
   timestamps: true,
