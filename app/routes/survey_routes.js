@@ -86,6 +86,7 @@ router.post('/surveys', requireToken, (req, res, next) => {
   Survey.create(req.body.survey)
     // respond to succesful `create` with status 201 and JSON of new "survey"
     .then(survey => {
+      req.app.get('socketio').emit('message')
       res.status(201).json({ survey: survey.toObject() })
     })
     // if an error occurs, pass it off to our error handler
@@ -112,7 +113,10 @@ router.patch('/surveys/:id', requireToken, removeBlanks, (req, res, next) => {
       return survey.set(req.body.survey).save()
     })
     // if that succeeded, return 204 and no JSON
-    .then(survey => res.status(200).json({ survey: survey.toObject() }))
+    .then(survey => {
+      req.app.get('socketio').emit('message')
+      res.status(200).json({ survey: survey.toObject() })
+    })
     // if an error occurs, pass it to the handler
     .catch(next)
 })
@@ -129,7 +133,10 @@ router.delete('/surveys/:id', requireToken, (req, res, next) => {
       survey.deleteOne()
     })
     // send back 204 and no content if the deletion succeeded
-    .then(() => res.sendStatus(204))
+    .then(() => {
+      req.app.get('socketio').emit('message')
+      res.sendStatus(204)
+    })
     // if an error occurs, pass it to the handler
     .catch(next)
 })

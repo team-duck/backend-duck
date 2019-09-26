@@ -74,9 +74,20 @@ app.use(surveyRoutes)
 app.use(errorHandler)
 
 // run API on designated port (4741 in this case)
-app.listen(port, () => {
-  console.log('listening on port ' + port)
-})
+// app.listen(port, () => {
+//   console.log('listening on port ' + port)
+// })
 
+const server = app.listen(port, () => {
+  console.log('listening on port' + port)
+})
+const io = require('socket.io')(server)
+
+app.set('socketio', io)
+
+io.on('connect', socket => {
+  // socket.emit('id', socket.id)
+  console.log(socket)
+})
 // needed for testing
 module.exports = app
