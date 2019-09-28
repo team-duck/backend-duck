@@ -1,6 +1,17 @@
 # WHAT THE DUCK?
 
 ## Description
+What the duck is an application that allows user to create a survey, be able to edit it whenever they want to. If they feel like they don't need it anymore is that they can also delete it.
+
+We implemented a feature that allows user to see a graphic with other's people answers.
+
+This application gives you the ability to create as many content as you need to create and each of the content will be represented in a chart using CanvasJS.
+
+
+[Nicholas Powel](https://github.com/orgs/team-duck/people/nicholaspowel)
+[Danny Pham](https://github.com/orgs/team-duck/people/dnnyp)
+[Michelle Rahman](https://github.com/MichelleRahman21)
+
 
 ## MVP User Stories
 
@@ -34,7 +45,7 @@ API Paths & Methods
 |--------|------------------------
 | POST   | `/surveys`
 | GET    | `/surveys`
-| GET    | `/my-surveys`
+| GET    | `/surveys`
 | PATCH  | `/surveys/:id`
 | DELETE | `/surveys/:id`
 
@@ -42,20 +53,22 @@ API Paths & Methods
 
 | Method   | URL
 |--------|------------------------
-| POST   | `/options`
-| PATCH  | `/options/:id`
-| DELETE | `/options/:id`
-
-### Responses
-
-| Method   | URL
-|--------|------------------------
 | POST   | `/responses`
+| PATCH  | `/responses/:id`
+| DELETE | `/responses/:id`
 
 ## Wireframes
-![Wireframe](https://michelle04.s3.amazonaws.com/New+Wireframe+2.png)
+![Wireframe](https://i.imgur.com/6GJLI99.png)
 
-![Wireframe](https://i.imgur.com/0QMdTYE.png)
+![Wireframe](https://i.imgur.com/uoD9G9K.png)
+
+![Wireframe](https://i.imgur.com/VUqbzX3.png)
+
+![Wireframe](https://i.imgur.com/Nb9PLRR.png)
+
+![Wireframe](https://i.imgur.com/PcNw9ew.png)
+
+![Wireframe](https://i.imgur.com/7gzVFcu.png)
 ## Tools
 
 ### Deployment
@@ -69,13 +82,32 @@ jQuery for DOM manipulation and event handling
 AJAX
 
 ### Front-end
+Html
+CSS
+Animated CSS
+JavaScript
+Bootrasp
+Handlebars
+CanvasJS
+jQuery
+AJAX
 
 ### Back-end
+Postman
+Socket.io
+Express (Created 4RESTful routes for handling (GET, POST,PUT,PATCH and DELETE) requests)
+
+### Database
+MongoDb
+Mongoose
 
 ## Links!
 
-here goes front end repo
-here goes back end url
+[Visit our back-end repo!](https://github.com/team-duck/backend-duck)
+
+[Backend url](https://still-scrubland-32932.herokuapp.com/)
+
 here goes front end url
 
-## Schedule
+## Unsolved problems
+Create more than 4 questions
