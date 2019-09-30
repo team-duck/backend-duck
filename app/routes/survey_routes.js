@@ -45,7 +45,10 @@ router.patch('/response/:id', requireToken, (req, res, next) => {
           return addUserToResponse(survey, userResponse)
             .then(survey => addSurveyToUser(user, survey))
         })
-        .then(user => res.status(200).json({ survey: survey.toObject(), user: user.toObject() }))
+        .then(user => {
+          req.app.get('socketio').emit('message')
+          res.status(200).json({ survey: survey.toObject(), user: user.toObject() })
+        })
     })
     .catch(next)
 })
